@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+venv/
+
+# Environment variables
+.env
+.env.*
+
+# Django
+db.sqlite3
+
+# VS Code
+.vscode/git rm -r --cached -- "**/__pycache__"
