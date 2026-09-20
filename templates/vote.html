@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+body
+{
+    background:none !important;
+}
+.vote-page
+{
+    position:fixed;
+    top:50px;     
+    left:0;
+    width:100%;
+    height:100vh;
+    background:url("{% static 'images/vote-bg.jpg' %}") no-repeat center center;
+    background-size:cover;
+    z-index:-1;
+}
+.vote-container
+{
+    padding-top:120px;
+}
+.vote-title
+{
+    text-align:center;
+    font-size:32px;
+    font-weight:700;
+}
+.vote-subtitle
+{
+    text-align:center;
+    color:#1d0404;
+    margin-bottom:40px;
+}
+.vote-card{
+    background:rgba(255,255,255,0.35);
+    backdrop-filter:blur(12px);
+    border-radius:20px;
+    padding:25px;
+    text-align:center;
+    transition:0.3s;
+    cursor:pointer;
+    border:2px solid transparent;
+}
+.vote-card:hover{
+    transform:translateY(-6px);
+}
+input[type="radio"]:checked + .vote-card{
+    border:3px solid orange;
+    box-shadow:0 0 20px rgba(255,152,0,0.5);
+}
+.candidate-img
+{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    margin-bottom:15px;
+}
+.vote-btn
+{
+    background: linear-gradient(90deg,#F58220,#FFFFFF,#4DB848);;
+    color:rgb(11, 1, 1);
+    border:none;
+    padding:14px;
+    border-radius:12px;
+    font-weight:600;
+}
+</style>
+<div class="vote-page"></div>
+<div class="container vote-container">
+    <h2 class="vote-title">CAST YOUR VOTE</h2>
+    <p class="vote-subtitle">Please select your preferred candidate below</p>
+    {% if election %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row justify-content-center">
+            {% for candidate in candidates %}
+            <div class="col-md-4 mb-4 text-center">
+                <label>
+                    <input type="radio" name="candidate" value="{{ candidate.id }}" hidden>
+                    <div class="vote-card">
+                        {% if candidate.image %}
+                        <img src="{{ candidate.image.url }}" class="candidate-img">
+                        {% else %}
+                        <img src="{% static 'images/user.png' %}" class="candidate-img">
+                        {% endif %}
+                        <h4>{{ candidate.name }}</h4>
+                        <p>{{ candidate.description }}</p>
+                    </div>
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+        {% if already_voted %}
+        <button class="btn btn-secondary w-50 mx-auto d-block" disabled>
+            You Already Voted
+        </button>
+        {% else %}
+        <button class="btn vote-btn w-50 mx-auto d-block">
+            SUBMIT VOTE
+        </button>
+        {% endif %}
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

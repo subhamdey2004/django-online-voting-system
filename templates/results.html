@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+.result-page
+{
+    min-height:100vh;
+    background-image:url("{% static 'images/vote-bg.jpg' %}");
+    background-size:cover;
+    background-position:center;
+    padding-top:60px;
+}
+.result-title
+{
+    text-align:center;
+    font-size:32px;
+    font-weight:700;
+    margin-bottom:40px;
+}
+.result-card
+{
+    background:rgba(255,255,255,0.3);
+    backdrop-filter:blur(12px);
+    border-radius:20px;
+    padding:25px;
+    text-align:center;
+    transition:0.3s;
+}
+.result-card:hover
+{
+    transform:translateY(-5px);
+}
+.winner
+{
+    border:3px solid #ff9800;
+    box-shadow:0 0 25px rgba(255,152,0,0.5);
+}
+.vote-count
+{
+    font-size:24px;
+    font-weight:700;
+    color:#4e73df;
+}
+</style>
+<div class="result-page">
+    <div class="container">
+        <h2 class="result-title">🏆 {{ election.title }} - Results</h2>
+        {% if election %}
+        <div class="row justify-content-center">
+            {% for candidate in candidates %}
+            <div class="col-md-4 mb-4">
+                <div class="result-card {% if candidate == winner %}winner{% endif %}">
+                    <h4>{{ candidate.name }}</h4>
+                    <p>{{ candidate.description }}</p>
+                    <div class="vote-count">
+                        Votes: {{ candidate.vote_set.count }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <h3 class="text-center">No Active Election</h3>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
